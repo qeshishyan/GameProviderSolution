@@ -1,0 +1,40 @@
+version: '3.4'
+
+services:
+  user-service:
+    image: user-service
+    build:
+      context: ./src/UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5158:5158"
+    #depends_on:
+    #  - api-gateway
+
+  #api-gateway:
+  #  image: api-gateway
+  #  build:
+  #    context: ./src/APIGateway
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "7000:7000"
+
+  crash-game-service:
+    image: crash-game-service
+    build:
+      context: ./src/CrashGameService
+      dockerfile: Dockerfile
+    ports:
+      - "7021:7021"
+    #depends_on:
+    #  - api-gateway
+
+  provider-service:
+    image: provider-service
+    build:
+      context: ./src/GameProviderService
+      dockerfile: Dockerfile
+    ports:
+      - "7189:7189"
+    #depends_on:
+    #  - api-gateway
