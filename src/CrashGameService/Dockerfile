@@ -6,10 +6,10 @@ EXPOSE 7021
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["CrashGameService.csproj", "src/CrashGameService/"]
-RUN dotnet restore "src/CrashGameService/CrashGameService.csproj"
+COPY ["CrashGameService.csproj", "CrashGameService/"]
+RUN dotnet restore "CrashGameService.csproj"
 COPY . .
-WORKDIR "/src/src/CrashGameService"
+WORKDIR "/src/CrashGameService"
 RUN dotnet build "CrashGameService.csproj" -c Release -o /app/build
 
 FROM build AS publish

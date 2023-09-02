@@ -1,7 +1,7 @@
 ﻿{
   "Routes": [
     {
-      "UpstreamPathTemplate": "/TestUserService",
+      "UpstreamPathTemplate": "/user/getUser",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -9,32 +9,8 @@
           "Port": 5158
         }
       ],
-      "DownstreamPathTemplate": "/WeatherForecast",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      "UpstreamPathTemplate": "/TestProviderService",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7189
-        }
-      ],
-      "DownstreamPathTemplate": "/WeatherForecast",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      "UpstreamPathTemplate": "/TestCrashGameService",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7021
-        }
-      ],
-      "DownstreamPathTemplate": "/WeatherForecast",
-      "UpstreamHttpMethod": [ "Get" ]
+      "DownstreamPathTemplate": "/user/getUser",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ]
 }

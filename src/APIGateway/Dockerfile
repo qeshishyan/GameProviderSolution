@@ -7,10 +7,10 @@ EXPOSE 7000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["APIGateway.csproj", "src/APIGateway/"]
-RUN dotnet restore "src/APIGateway/APIGateway.csproj"
+COPY ["APIGateway.csproj", "APIGateway/"]
+RUN dotnet restore "APIGateway.csproj"
 COPY . .
-WORKDIR "/src/src/APIGateway"
+WORKDIR "/src/APIGateway"
 RUN dotnet build "APIGateway.csproj" -c Release -o /app/build
 
 FROM build AS publish
