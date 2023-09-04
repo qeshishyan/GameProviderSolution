@@ -18,8 +18,6 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-// ... other middleware configurations
-
 app.UseOcelot().Wait();
 
 app.Run();
