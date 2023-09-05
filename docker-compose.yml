@@ -7,8 +7,8 @@ services:
       context: ./src/UserService
       dockerfile: Dockerfile
     ports:
-      - "5159:5158"
-    depends_on:
+      - "5158:5158"
+    depends_on: 
       - api-gateway
 
   api-gateway:
@@ -17,7 +17,7 @@ services:
       context: ./src/APIGateway
       dockerfile: Dockerfile
     ports:
-      - "7002:7001"
+      - "7001:7001"
 
   crash-game-service:
     image: crash-game-service
@@ -25,8 +25,8 @@ services:
       context: ./src/CrashGameService
       dockerfile: Dockerfile
     ports:
-      - "7022:7021"
-    depends_on:
+      - "7021:7021"
+    depends_on: 
       - api-gateway
 
   provider-service:
@@ -35,6 +35,6 @@ services:
       context: ./src/GameProviderService
       dockerfile: Dockerfile
     ports:
-      - "7188:7189"
-    depends_on:
+      - "7189:7189"
+    depends_on: 
       - api-gateway

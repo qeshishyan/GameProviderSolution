@@ -1,3 +1,4 @@
+using APIGateway.Middlewares;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -8,7 +9,15 @@ var configuration = new ConfigurationBuilder()
     .Build();
 
 // Add services to the container.
-builder.Services.AddOcelot(configuration);
+builder.Services.AddOcelot(configuration)
+    .AddDelegatingHandler<ExceptionHandlingDelegatingHandler>();
+
+builder.WebHost.UseKestrel();
+builder.WebHost.UseIISIntegration();
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7001); // Listen on port 80 from any IP address.
+});
 
 var app = builder.Build();
 

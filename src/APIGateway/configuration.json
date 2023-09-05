@@ -1,16 +1,17 @@
 ﻿{
   "Routes": [
     {
-      "UpstreamPathTemplate": "/user/getUser",
-      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/api/user",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/user/getuser",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "user-service",
+          //"Host": "localhost",
           "Port": 5158
         }
-      ],
-      "DownstreamPathTemplate": "/api/user/getUser",
-      "UpstreamHttpMethod": [ "POST" ]
+      ]
     }
   ]
 }
