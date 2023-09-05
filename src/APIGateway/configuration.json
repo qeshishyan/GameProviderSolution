@@ -9,7 +9,7 @@
           "Port": 5158
         }
       ],
-      "DownstreamPathTemplate": "/user/getUser",
+      "DownstreamPathTemplate": "/api/user/getUser",
       "UpstreamHttpMethod": [ "POST" ]
     }
   ]
