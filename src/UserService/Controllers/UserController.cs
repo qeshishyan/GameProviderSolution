@@ -19,5 +19,11 @@ namespace UserService.Controllers
         {
             return Ok(await _userService.GetUser(request));
         }
+
+        [HttpPost("getUserBalance")]
+        public async Task<IActionResult> GetUserBalance(GetUserRequest request)
+        {
+            return Ok(await _userService.GetUserBalance(request));
+        }
     }
 }

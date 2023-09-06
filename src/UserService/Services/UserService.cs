@@ -13,5 +13,8 @@ namespace UserService.Services
 
         public async Task<UserResponse> GetUser(GetUserRequest request)=>
            await _userRepository.GetUser(request);
+
+        public async Task<UserBalanceResponse> GetUserBalance(GetUserRequest request) =>
+           await _userRepository.GetUserBalance(request);
     }
 }

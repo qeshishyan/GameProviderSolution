@@ -12,6 +12,19 @@
           "Port": 5158
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/user/balance",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/user/getUserBalance",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user-service",
+          //"Host": "localhost",
+          "Port": 5158
+        }
+      ]
     }
   ]
 }
