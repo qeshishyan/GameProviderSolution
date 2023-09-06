@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using APIGateway.Models;
+using Newtonsoft.Json;
+using System.Net;
 
 namespace APIGateway.Middlewares
 {
@@ -9,23 +11,33 @@ namespace APIGateway.Middlewares
             try
             {
                 HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
-                if (response.IsSuccessStatusCode)
+                var standardResponse = new ResponseModel
                 {
-                    return response;
+                    StatusCode = (int)response.StatusCode,
+                    Message = response.StatusCode.ToString()
+                };
+                if (response.IsSuccessStatusCode && response.Content != null)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    object? data = JsonConvert.DeserializeObject(content);
+                    standardResponse.Data = data;
                 }
+                var standardContent = JsonConvert.SerializeObject(standardResponse);
+                response.Content = new StringContent(standardContent, System.Text.Encoding.UTF8, "application/json");
+                return response;
             }
             catch (Exception ex)
             {
+                var standardContent = JsonConvert.SerializeObject(new ResponseModel
+                {
+                    StatusCode = StatusCodes.Status502BadGateway,
+                    Message = ex.Message
+                });
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
-                    Content = new StringContent("An error occurred. Message: " + ex.Message)
+                    Content = new StringContent(standardContent, System.Text.Encoding.UTF8, "application/json")
                 };
             }
-
-            return new HttpResponseMessage(HttpStatusCode.InternalServerError)
-            {
-                Content = new StringContent("An error occurred.")
-            };
         }
     }
 }

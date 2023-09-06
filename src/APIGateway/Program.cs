@@ -10,7 +10,7 @@ var configuration = new ConfigurationBuilder()
 
 // Add services to the container.
 builder.Services.AddOcelot(configuration)
-    .AddDelegatingHandler<ExceptionHandlingDelegatingHandler>();
+    .AddDelegatingHandler<ExceptionHandlingDelegatingHandler>(true);
 
 builder.WebHost.UseKestrel();
 builder.WebHost.UseIISIntegration();
