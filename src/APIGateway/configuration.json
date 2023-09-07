@@ -7,8 +7,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "user-service",
-          //"Host": "localhost",
+          //"Host": "user-service",
+          "Host": "localhost",
           "Port": 5158
         }
       ]
@@ -20,8 +20,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "user-service",
-          //"Host": "localhost",
+          //"Host": "user-service",
+          "Host": "localhost",
           "Port": 5158
         }
       ]

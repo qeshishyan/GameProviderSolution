@@ -14,14 +14,14 @@ namespace APIGateway.Middlewares
                 var standardResponse = new ResponseModel
                 {
                     StatusCode = (int)response.StatusCode,
-                    Message = response.StatusCode.ToString()
+                    Message = response.StatusCode.ToString(),
+                    Success = response.IsSuccessStatusCode
                 };
-                if (response.IsSuccessStatusCode && response.Content != null)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    object? data = JsonConvert.DeserializeObject(content);
-                    standardResponse.Data = data;
-                }
+
+                var content = await response.Content.ReadAsStringAsync();
+                object? data = JsonConvert.DeserializeObject(content);
+                standardResponse.Data = data;
+
                 var standardContent = JsonConvert.SerializeObject(standardResponse);
                 response.Content = new StringContent(standardContent, System.Text.Encoding.UTF8, "application/json");
                 return response;
@@ -31,7 +31,8 @@ namespace APIGateway.Middlewares
                 var standardContent = JsonConvert.SerializeObject(new ResponseModel
                 {
                     StatusCode = StatusCodes.Status502BadGateway,
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Success = false
                 });
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {

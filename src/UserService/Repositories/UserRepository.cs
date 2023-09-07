@@ -1,4 +1,5 @@
 ﻿using UserService.Entities;
+using UserService.Exceptions;
 using UserService.Models;
 
 namespace UserService.Repositories
@@ -19,9 +20,10 @@ namespace UserService.Repositories
                 { "HFSA548-SDA544848ADS-54AS8DQ.ASDASDAS4748Q1246978", new User {Avatar = "https://img.icons8.com/?size=256&id=23242&format=png", UserName = "User134", Balance = 0.00 } }
             };
         }
+
         public async Task<UserResponse> GetUser(GetUserRequest request)
         {
-            if(_users.TryGetValue(request.Token!, out User? user))
+            if (_users.TryGetValue(request.Token!, out User? user))
             {
                 await Task.CompletedTask;
                 return new UserResponse
@@ -30,7 +32,7 @@ namespace UserService.Repositories
                     UserName = user.UserName
                 };
             }
-            throw new NullReferenceException("User not found!");
+            throw new ApiException(400, "User not found!");
         }
 
         public async Task<UserBalanceResponse> GetUserBalance(GetUserRequest request)
@@ -43,7 +45,7 @@ namespace UserService.Repositories
                     Balance = user.Balance
                 };
             }
-            throw new NullReferenceException("User not found!");
+            throw new ApiException(400, "User not found!");
         }
     }
 }
