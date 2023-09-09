@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashGameService", "src\Cra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "src\APIGateway\APIGateway.csproj", "{35938F92-D02C-4C46-BC8C-2978498B643E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "src\Shared\Shared.csproj", "{64203F7E-F521-44E5-9DC7-12A8927F2886}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +40,10 @@ Global
 		{35938F92-D02C-4C46-BC8C-2978498B643E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35938F92-D02C-4C46-BC8C-2978498B643E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35938F92-D02C-4C46-BC8C-2978498B643E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64203F7E-F521-44E5-9DC7-12A8927F2886}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64203F7E-F521-44E5-9DC7-12A8927F2886}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64203F7E-F521-44E5-9DC7-12A8927F2886}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64203F7E-F521-44E5-9DC7-12A8927F2886}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

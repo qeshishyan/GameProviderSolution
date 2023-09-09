@@ -1,5 +1,5 @@
-﻿using UserService.Entities;
-using UserService.Exceptions;
+﻿using Shared.Exceptions;
+using UserService.Entities;
 using UserService.Models;
 
 namespace UserService.Repositories
@@ -32,7 +32,7 @@ namespace UserService.Repositories
                     UserName = user.UserName
                 };
             }
-            throw new ApiException(400, "User not found!");
+            throw new ApiException(404, "User not found!");
         }
 
         public async Task<UserBalanceResponse> GetUserBalance(GetUserRequest request)
@@ -45,7 +45,7 @@ namespace UserService.Repositories
                     Balance = user.Balance
                 };
             }
-            throw new ApiException(400, "User not found!");
+            throw new ApiException(404, "User not found!");
         }
     }
 }

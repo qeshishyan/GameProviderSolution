@@ -1,4 +1,4 @@
-﻿namespace UserService.Exceptions
+﻿namespace Shared.Exceptions
 {
     public class ApiException : Exception
     {

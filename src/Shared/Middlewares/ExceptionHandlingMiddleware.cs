@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Net;
-using UserService.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using Shared.Exceptions;
 
-namespace UserService.Middlewares
+namespace Shared.Middlewares
 {
     public class ExceptionHandlingMiddleware
     {

@@ -13,7 +13,6 @@ builder.Services.AddOcelot(configuration)
     .AddDelegatingHandler<ExceptionHandlingDelegatingHandler>(true);
 
 builder.WebHost.UseKestrel();
-builder.WebHost.UseIISIntegration();
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(7001); // Listen on port 80 from any IP address.

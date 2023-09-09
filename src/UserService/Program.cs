@@ -1,5 +1,5 @@
+using Shared.Middlewares;
 using UserService.Extensions;
-using UserService.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
