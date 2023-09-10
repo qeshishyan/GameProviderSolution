@@ -5,11 +5,17 @@ EXPOSE 7189
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["GameProviderService.csproj", "GameProviderService/"]
+COPY ["GameProviderService/GameProviderService.csproj", "GameProviderService/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+COPY ["Shared/", "Shared/"]
+
 RUN dotnet restore "GameProviderService/GameProviderService.csproj"
 
+WORKDIR "/src/Shared"
+RUN dotnet build "Shared.csproj" -c Release
+
 WORKDIR "/src/GameProviderService"
-COPY . .
+COPY GameProviderService/ .
 RUN dotnet build "GameProviderService.csproj" -c Release -o /app/build
 
 FROM build AS publish

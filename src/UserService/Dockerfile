@@ -5,11 +5,17 @@ EXPOSE 5158
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-COPY ["UserService.csproj", "UserService/"]
+COPY ["UserService/UserService.csproj", "UserService/"]
+COPY ["Shared/Shared.csproj", "Shared/"]
+COPY ["Shared/", "Shared/"]
+
 RUN dotnet restore "UserService/UserService.csproj"
 
+WORKDIR "/src/Shared"
+RUN dotnet build "Shared.csproj" -c Release
+
 WORKDIR "/src/UserService"
-COPY . .
+COPY UserService/ .
 RUN dotnet build "UserService.csproj" -c Release -o /app/build
 
 FROM build AS publish
