@@ -1,4 +1,5 @@
 using CrashGameService.Extensions;
+using CrashGameService.Hubs;
 using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServices();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder
+        //.WithOrigins("http://your-react-app-url.com") // replace with your React app's URL
+        .WithOrigins("http://localhost:7021", "null")
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+});
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -24,11 +38,17 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.UseAuthorization();
+app.UseCors("CorsPolicy");
 
-app.MapControllers();
+app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<GameHub>("/gamehub");
+    endpoints.MapControllers();
+});
 
 app.Run();

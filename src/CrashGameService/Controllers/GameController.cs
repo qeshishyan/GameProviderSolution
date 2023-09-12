@@ -1,4 +1,7 @@
-﻿using CrashGameService.Services;
+﻿using AutoMapper;
+using CrashGameService.Entities;
+using CrashGameService.Models;
+using CrashGameService.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrashGameService.Controllers
@@ -8,15 +11,18 @@ namespace CrashGameService.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
-        public GameController(IGameService gameService)
+        private readonly IMapper _mapper;
+        public GameController(IGameService gameService, IMapper mapper)
         {
             _gameService = gameService;
+            _mapper = mapper;
         }
 
-        [HttpGet("bet")]
-        public async Task<IActionResult> Bet()
+        [HttpPost("bet")]
+        public async Task<IActionResult> Bet(BetRequest request)
         {
-            return Ok(new { Message = "Ok"});
+            var bet = _mapper.Map<Bet>(request);
+            return Ok(await _gameService.Bet(bet));
         }
 
         [HttpPost("cashOut")]
@@ -28,6 +34,7 @@ namespace CrashGameService.Controllers
         [HttpPost("start")]
         public async Task<IActionResult> StartGame()
         {
+            await _gameService.StartGame();
             return Ok();
         }
     }
