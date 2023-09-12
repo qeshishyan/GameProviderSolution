@@ -25,6 +25,45 @@
           "Port": 5158
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/start",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/start",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/cashOut",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/cashOut",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/bet",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/game/bet",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
     }
   ]
 }

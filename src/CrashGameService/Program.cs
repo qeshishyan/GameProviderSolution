@@ -1,3 +1,4 @@
+using CrashGameService.Extensions;
 using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
