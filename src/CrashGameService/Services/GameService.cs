@@ -95,13 +95,14 @@ namespace CrashGameService.Services
             while (!_token.IsCancellationRequested)
             {
                 round.Multiplier += 0.1d;
-                var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier value", Type = 3001, Multiplier = round.Multiplier });
+                var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier value", Type = 3001, Multiplier = round.Multiplier.ToString("F2") });
                 task = _hubContext.Clients.All.SendAsync("ReceiveMultiplier", multipJson);
                 task.Wait();
 
-                if (random.Next(3000, 9000) > 8980)
+                //Change to real game logic
+                if (random.Next(3000, 9000) > 8900)
                 {
-                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Type = 2002, Multiplier = round.Multiplier });
+                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Type = 2002, Multiplier = round.Multiplier.ToString("F2") });
                     task = _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
 
                     round.IsCrashed = true;
@@ -111,7 +112,7 @@ namespace CrashGameService.Services
                     Thread.Sleep(2000);
                     break;
                 }
-                Thread.Sleep(200);
+                Thread.Sleep(100);
             }
             StartBettingTime();
         }
