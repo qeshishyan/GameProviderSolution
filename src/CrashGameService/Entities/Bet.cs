@@ -8,5 +8,6 @@
         public DateTime BetDate { get; set; }
         public bool Win { get; set; } = false;
         public double Multiplier { get; set; }
+        public string? Token { get; set; }
     }
 }

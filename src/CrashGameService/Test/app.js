@@ -3,7 +3,6 @@
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-// Function to display received messages on the page
 connection.on("StartBettingTime", (data) => {
     console.log('StartBettingTime');
     const messagesElement = document.getElementById('messages');
@@ -43,6 +42,15 @@ connection.on("ReceiveMultiplier", (data) => {
     messageElement.textContent = `${data}`;
     messagesElement.appendChild(messageElement);
 });
+
+connection.on("BET", (data) => {
+    console.log('BET');
+    const messagesElement = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${data}`;
+    messagesElement.appendChild(messageElement);
+});
+
 
 // Start the connection
 connection.start()
