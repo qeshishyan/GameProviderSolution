@@ -26,9 +26,10 @@ namespace CrashGameService.Controllers
         }
 
         [HttpPost("cashOut")]
-        public async Task<IActionResult> CashOut()
+        public async Task<IActionResult> CashOut(CashOutRequest request)
         {
-            return Ok();
+            var cashOut = _mapper.Map<CashOut>(request);
+            return Ok(await _gameService.CashOut(cashOut));
         }
 
         [HttpGet("start")]

@@ -6,7 +6,7 @@ namespace CrashGameService.Services
     public interface IGameService
     {
         Task<BetResponse> Bet(Bet bet);
-        Task<double> CashOut(int betId, double multiplier);
+        Task<CashOutResponse> CashOut(CashOut request);
         Task StartGame();
     }
 }

@@ -30,8 +30,7 @@ namespace CrashGameService.Services
             _currentGameSession.Id = new Random().Next(10000, 99999);
             _currentGameSession.Started = true;
             _currentGameSession.StartedDate = DateTime.Now;
-            StartBettingTime();
-            await Task.CompletedTask;
+            await StartBettingTime();
         }
 
         public async Task<BetResponse> Bet(Bet bet)
@@ -47,12 +46,11 @@ namespace CrashGameService.Services
             //User id must be changed to real data
             object obj = new { Message = "BET", Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
             var betJson = JsonConvert.SerializeObject(obj);
-            Task task = _hubContext.Clients.All.SendAsync("BET", betJson);
+            await _hubContext.Clients.All.SendAsync("BET", betJson);
 
             // Save bet in db
             var response = new BetResponse { BetDate = bet.BetDate, GameRoundId = bet.GameRoundId, BetId = bet.Id };
-            task.Wait();
-            return await Task.FromResult(response);
+            return response;
         }
 
         private void ValidateBet(Bet bet)
@@ -73,48 +71,57 @@ namespace CrashGameService.Services
                 throw new ApiException(400, "Invalid bet multiplier");
         }
 
-        public async Task<double> CashOut(int betId, double multiplier)
+        public async Task<CashOutResponse> CashOut(CashOut cashOut)
         {
             //Save cash out in db
 
-            return await Task.FromResult(multiplier);
+            var bet = _currentGameSession.CurrentRound.Bets.Where(x => x.Id == cashOut.BetId).FirstOrDefault();
+            if (bet is null)
+                throw new ApiException(400, "Bet not found");
+
+            ValidateCashOut(cashOut, bet);
+
+            bet.Win = true;
+
+            return await Task.FromResult(new CashOutResponse { Value = bet.Value * cashOut.Multiplier });
         }
 
+        private void ValidateCashOut(CashOut cashOut, Bet? bet)
+        {
+            if (cashOut.Multiplier > _currentGameSession.CurrentRound.Multiplier)
+                throw new ApiException(400, "Invalid multiplier");
+        }
 
-        private void StartRound()
+        private async Task StartRound()
         {
             var random = new Random();
             var round = _currentGameSession.CurrentRound;
 
             //Send socket for round started
             var json = JsonConvert.SerializeObject(new { Message = "Round started" });
-            Task task = _hubContext.Clients.All.SendAsync("StartRound", json);
+            await _hubContext.Clients.All.SendAsync("StartRound", json);
             //round Save in db 
-            task.Wait();
 
             while (!_token.IsCancellationRequested)
             {
                 round.Multiplier += 0.1d;
                 var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier", Multiplier = round.Multiplier.ToString("F2") });
-                task = _hubContext.Clients.All.SendAsync("ReceiveMultiplier", multipJson);
-                task.Wait();
+                await _hubContext.Clients.All.SendAsync("ReceiveMultiplier", multipJson);
 
                 //Change to real game logic
                 if (random.Next(3000, 9000) > 8900)
                 {
                     var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") });
-                    task = _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
-
                     round.IsCrashed = true;
                     round.EndDate = DateTime.Now;
+                    await _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
 
-                    task.Wait();
                     Thread.Sleep(2000);
                     break;
                 }
                 Thread.Sleep(100);
             }
-            StartBettingTime();
+            await StartBettingTime();
         }
 
         private GameRound CreateRound() => 
@@ -126,15 +133,14 @@ namespace CrashGameService.Services
                 CreatedDate = DateTime.Now
             };
 
-        private void StartBettingTime()
+        private async Task StartBettingTime()
         {
             CreateRound();
             Timer _timer = new(StopBettingTimeCallback, null, 10000, Timeout.Infinite);
             _currentGameSession.BettingTime = true;
 
             var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id });
-            Task task = _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
-            task.Wait();
+            await _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
         }
 
         private void StopBettingTimeCallback(object? state)
@@ -146,8 +152,8 @@ namespace CrashGameService.Services
             _currentGameSession.CurrentRound.Started = true;
             _currentGameSession.CurrentRound.StartDate = DateTime.Now;
             
-            StartRound();
-            task.Wait();
+            Task startTask = StartRound();
+            Task.WaitAll(startTask, task);
         }
     }
 }
