@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CrashGameService.Entities;
-using CrashGameService.Models;
+﻿using CrashGameService.Models;
 using CrashGameService.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,25 +9,21 @@ namespace CrashGameService.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
-        private readonly IMapper _mapper;
-        public GameController(IGameService gameService, IMapper mapper)
+        public GameController(IGameService gameService)
         {
             _gameService = gameService;
-            _mapper = mapper;
         }
 
         [HttpPost("bet")]
         public async Task<IActionResult> Bet(BetRequest request)
         {
-            var bet = _mapper.Map<Bet>(request);
-            return Ok(await _gameService.Bet(bet));
+            return Ok(await _gameService.Bet(request));
         }
 
         [HttpPost("cashOut")]
         public async Task<IActionResult> CashOut(CashOutRequest request)
         {
-            var cashOut = _mapper.Map<CashOut>(request);
-            return Ok(await _gameService.CashOut(cashOut));
+            return Ok(await _gameService.CashOut(request));
         }
 
         [HttpGet("start")]

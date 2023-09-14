@@ -5,8 +5,8 @@ namespace CrashGameService.Services
 {
     public interface IGameService
     {
-        Task<BetResponse> Bet(Bet bet);
-        Task<CashOutResponse> CashOut(CashOut request);
+        Task<BetResponse> Bet(BetRequest bet);
+        Task<CashOutResponse> CashOut(CashOutRequest request);
         Task StartGame();
     }
 }

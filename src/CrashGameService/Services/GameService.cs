@@ -1,4 +1,5 @@
-﻿using CrashGameService.Entities;
+﻿using AutoMapper;
+using CrashGameService.Entities;
 using CrashGameService.Hubs;
 using CrashGameService.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -12,7 +13,9 @@ namespace CrashGameService.Services
         private readonly GameSession _currentGameSession;
         private readonly CancellationToken _token;
         private readonly IHubContext<GameHub> _hubContext;
-        public GameService(IHubContext<GameHub> hubContext)
+        private readonly IMapper _mapper;
+
+        public GameService(IHubContext<GameHub> hubContext, IMapper mapper)
         {
             _currentGameSession = new GameSession
             {
@@ -20,6 +23,7 @@ namespace CrashGameService.Services
             };
             _token = new CancellationTokenSource().Token;
             _hubContext = hubContext;
+            _mapper = mapper;
         }
 
         public async Task StartGame()
@@ -33,12 +37,14 @@ namespace CrashGameService.Services
             await StartBettingTime();
         }
 
-        public async Task<BetResponse> Bet(Bet bet)
+        public async Task<BetResponse> Bet(BetRequest betRequest)
         {
-            ValidateBet(bet);
+            ValidateBet(betRequest);
 
+            var bet = _mapper.Map<Bet>(betRequest);
             bet.BetDate = DateTime.Now;
             bet.GameRoundId = _currentGameSession.CurrentRound.Id;
+
             // Database key
             bet.Id = new Random().Next(10000, 99999);
             _currentGameSession.CurrentRound.Bets.Add(bet);
@@ -53,7 +59,7 @@ namespace CrashGameService.Services
             return response;
         }
 
-        private void ValidateBet(Bet bet)
+        private void ValidateBet(BetRequest bet)
         {
             if (!_currentGameSession.Started)
                 throw new ApiException(400, "Game not started");
@@ -71,25 +77,20 @@ namespace CrashGameService.Services
                 throw new ApiException(400, "Invalid bet multiplier");
         }
 
-        public async Task<CashOutResponse> CashOut(CashOut cashOut)
+        public async Task<CashOutResponse> CashOut(CashOutRequest cashOutRequest)
         {
-            //Save cash out in db
+            if (cashOutRequest.Multiplier > _currentGameSession.CurrentRound.Multiplier)
+                throw new ApiException(400, "Invalid multiplier");
+
+            var cashOut = _mapper.Map<CashOut>(cashOutRequest);
 
             var bet = _currentGameSession.CurrentRound.Bets.Where(x => x.Id == cashOut.BetId).FirstOrDefault();
             if (bet is null)
                 throw new ApiException(400, "Bet not found");
 
-            ValidateCashOut(cashOut, bet);
-
             bet.Win = true;
 
             return await Task.FromResult(new CashOutResponse { Value = bet.Value * cashOut.Multiplier });
-        }
-
-        private void ValidateCashOut(CashOut cashOut, Bet? bet)
-        {
-            if (cashOut.Multiplier > _currentGameSession.CurrentRound.Multiplier)
-                throw new ApiException(400, "Invalid multiplier");
         }
 
         private async Task StartRound()
