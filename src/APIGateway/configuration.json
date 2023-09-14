@@ -28,7 +28,7 @@
     },
     {
       "UpstreamPathTemplate": "/api/game/start",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/api/game/start",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -54,7 +54,7 @@
     },
     {
       "UpstreamPathTemplate": "/api/game/bet",
-      "UpstreamHttpMethod": [ "GET" ],
+      "UpstreamHttpMethod": [ "POST" ],
       "DownstreamPathTemplate": "/api/game/bet",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [

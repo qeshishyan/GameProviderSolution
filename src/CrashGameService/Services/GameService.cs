@@ -45,7 +45,7 @@ namespace CrashGameService.Services
             _currentGameSession.CurrentRound.Bets.Add(bet);
 
             //User id must be changed to real data
-            object obj = new { Message = "BET", Type = 2001, Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
+            object obj = new { Message = "BET", Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
             var betJson = JsonConvert.SerializeObject(obj);
             Task task = _hubContext.Clients.All.SendAsync("BET", betJson);
 
@@ -87,7 +87,7 @@ namespace CrashGameService.Services
             var round = _currentGameSession.CurrentRound;
 
             //Send socket for round started
-            var json = JsonConvert.SerializeObject(new { Message = "Round started", Type = 2001 });
+            var json = JsonConvert.SerializeObject(new { Message = "Round started" });
             Task task = _hubContext.Clients.All.SendAsync("StartRound", json);
             //round Save in db 
             task.Wait();
@@ -95,14 +95,14 @@ namespace CrashGameService.Services
             while (!_token.IsCancellationRequested)
             {
                 round.Multiplier += 0.1d;
-                var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier value", Type = 3001, Multiplier = round.Multiplier.ToString("F2") });
+                var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier", Multiplier = round.Multiplier.ToString("F2") });
                 task = _hubContext.Clients.All.SendAsync("ReceiveMultiplier", multipJson);
                 task.Wait();
 
                 //Change to real game logic
                 if (random.Next(3000, 9000) > 8900)
                 {
-                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Type = 2002, Multiplier = round.Multiplier.ToString("F2") });
+                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") });
                     task = _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
 
                     round.IsCrashed = true;
@@ -129,17 +129,17 @@ namespace CrashGameService.Services
         private void StartBettingTime()
         {
             CreateRound();
-            Timer _timer = new(StopBettingTimeCallback, null, 5000, Timeout.Infinite);
+            Timer _timer = new(StopBettingTimeCallback, null, 10000, Timeout.Infinite);
             _currentGameSession.BettingTime = true;
 
-            var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time started", Type = 1001, CurrentRoundId = _currentGameSession.CurrentRound.Id });
+            var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id });
             Task task = _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
             task.Wait();
         }
 
         private void StopBettingTimeCallback(object? state)
         {
-            var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time stoped", Type = 1002 });
+            var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time stoped" });
             Task task = _hubContext.Clients.All.SendAsync("StopBettingTime", crashJson);
 
             _currentGameSession.BettingTime = false;

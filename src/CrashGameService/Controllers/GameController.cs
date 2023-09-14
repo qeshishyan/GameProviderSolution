@@ -31,11 +31,11 @@ namespace CrashGameService.Controllers
             return Ok();
         }
 
-        [HttpPost("start")]
+        [HttpGet("start")]
         public async Task<IActionResult> StartGame()
         {
             await _gameService.StartGame();
-            return Ok();
+            return Ok("Game started");
         }
     }
 }
