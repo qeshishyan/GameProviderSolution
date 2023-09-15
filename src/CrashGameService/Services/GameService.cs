@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CrashGameService.Context;
 using CrashGameService.Entities;
 using CrashGameService.Hubs;
 using CrashGameService.Models;
@@ -14,8 +15,10 @@ namespace CrashGameService.Services
         private readonly CancellationToken _token;
         private readonly IHubContext<GameHub> _hubContext;
         private readonly IMapper _mapper;
+        private readonly CrashDbContext _dbContext;
 
-        public GameService(IHubContext<GameHub> hubContext, IMapper mapper)
+        public GameService(IHubContext<GameHub> hubContext, 
+            IMapper mapper, CrashDbContext dbContext)
         {
             _currentGameSession = new GameSession
             {
@@ -24,16 +27,17 @@ namespace CrashGameService.Services
             _token = new CancellationTokenSource().Token;
             _hubContext = hubContext;
             _mapper = mapper;
+            _dbContext = dbContext;
         }
 
         public async Task StartGame()
         {
-            //Save session in db
-
-            // Database key
-            _currentGameSession.Id = new Random().Next(10000, 99999);
             _currentGameSession.Started = true;
-            _currentGameSession.StartedDate = DateTime.Now;
+            _currentGameSession.StartedDate = DateTime.UtcNow;
+
+            await _dbContext.GameSessions.AddAsync(_currentGameSession);
+            await _dbContext.SaveChangesAsync();
+
             await StartBettingTime();
         }
 
@@ -42,17 +46,18 @@ namespace CrashGameService.Services
             ValidateBet(betRequest);
 
             var bet = _mapper.Map<Bet>(betRequest);
-            bet.BetDate = DateTime.Now;
-            bet.GameRoundId = _currentGameSession.CurrentRound.Id;
+            bet.BetDate = DateTime.UtcNow;
+            bet.Round = _currentGameSession.CurrentRound;
 
-            // Database key
-            bet.Id = new Random().Next(10000, 99999);
-            _currentGameSession.CurrentRound.Bets.Add(bet);
+            await _dbContext.Bets.AddAsync(bet);
+            var saveTask = _dbContext.SaveChangesAsync();
 
             //User id must be changed to real data
             object obj = new { Message = "BET", Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
             var betJson = JsonConvert.SerializeObject(obj);
-            await _hubContext.Clients.All.SendAsync("BET", betJson);
+            var sendTask = _hubContext.Clients.All.SendAsync("BET", betJson);
+            
+            await Task.WhenAll(saveTask, sendTask);
 
             // Save bet in db
             var response = new BetResponse { BetDate = bet.BetDate, GameRoundId = bet.GameRoundId, BetId = bet.Id };
@@ -83,6 +88,7 @@ namespace CrashGameService.Services
                 throw new ApiException(400, "Invalid multiplier");
 
             var cashOut = _mapper.Map<CashOut>(cashOutRequest);
+            _dbContext.CashOuts.Add(cashOut);
 
             var bet = _currentGameSession.CurrentRound.Bets.Where(x => x.Id == cashOut.BetId).FirstOrDefault();
             if (bet is null)
@@ -96,12 +102,20 @@ namespace CrashGameService.Services
         private async Task StartRound()
         {
             var random = new Random();
+
+
+            _currentGameSession.CurrentRound.Started = true;
+            _currentGameSession.CurrentRound.StartDate = DateTime.UtcNow;
             var round = _currentGameSession.CurrentRound;
+
+            _dbContext.Update<GameRound>(round);
+            var saveTask = _dbContext.SaveChangesAsync();
 
             //Send socket for round started
             var json = JsonConvert.SerializeObject(new { Message = "Round started" });
-            await _hubContext.Clients.All.SendAsync("StartRound", json);
-            //round Save in db 
+            Task sendTask = _hubContext.Clients.All.SendAsync("StartRound", json);
+
+            await Task.WhenAll(saveTask, sendTask);
 
             while (!_token.IsCancellationRequested)
             {
@@ -112,10 +126,16 @@ namespace CrashGameService.Services
                 //Change to real game logic
                 if (random.Next(3000, 9000) > 8900)
                 {
-                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") });
                     round.IsCrashed = true;
-                    round.EndDate = DateTime.Now;
-                    await _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
+                    round.EndDate = DateTime.UtcNow;
+                    
+                    var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") });
+                    sendTask = _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
+
+                    _dbContext.Update<GameRound>(round);
+                    saveTask = _dbContext.SaveChangesAsync();
+
+                    await Task.WhenAll(saveTask, sendTask);
 
                     Thread.Sleep(2000);
                     break;
@@ -129,32 +149,46 @@ namespace CrashGameService.Services
             _currentGameSession.CurrentRound = new()
             {
                 // Database key
-                Id = new Random().Next(10000, 99999),
+                //Id = new Random().Next(10000, 99999),
                 GameSessionId = _currentGameSession.Id,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow
             };
 
         private async Task StartBettingTime()
         {
             CreateRound();
             Timer _timer = new(StopBettingTimeCallback, null, 10000, Timeout.Infinite);
-            _currentGameSession.BettingTime = true;
 
             var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id });
-            await _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
+            Task sendTask = _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
+            Task betTimeTask = OnBettingTime();
+            await Task.WhenAll(sendTask, betTimeTask);
         }
 
-        private void StopBettingTimeCallback(object? state)
+        private async Task OnBettingTime()
+        {
+            _currentGameSession.BettingTime = true;
+            _dbContext.Update<GameSession>(_currentGameSession);
+            await _dbContext.SaveChangesAsync();
+        }
+        private async Task OffBettingTime()
+        {
+            _currentGameSession.BettingTime = false;
+            _dbContext.Update<GameSession>(_currentGameSession);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async void StopBettingTimeCallback(object? state)
         {
             var crashJson = JsonConvert.SerializeObject(new { Message = "Betting time stoped" });
-            Task task = _hubContext.Clients.All.SendAsync("StopBettingTime", crashJson);
-
-            _currentGameSession.BettingTime = false;
-            _currentGameSession.CurrentRound.Started = true;
-            _currentGameSession.CurrentRound.StartDate = DateTime.Now;
             
-            Task startTask = StartRound();
-            Task.WaitAll(startTask, task);
+            var saveTask = _hubContext.Clients.All.SendAsync("StopBettingTime", crashJson);
+            var offTask = OffBettingTime();
+
+            await Task.WhenAll(saveTask, offTask);
+            await StartRound();
         }
+
+        
     }
 }

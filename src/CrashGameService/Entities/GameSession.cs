@@ -6,8 +6,8 @@
         public string? ProviderId { get; set; }
         public bool BettingTime { get; set; } = false;
         public bool Started { get; set; } = false;
-        public DateTime StartedDate { get; set; }
-        public List<GameRound> GameRounds { get; set; } = new List<GameRound> { };
-        public GameRound CurrentRound { get; set; } = new GameRound();
+        public DateTimeOffset StartedDate { get; set; }
+        public GameRound CurrentRound { get; set; }
+        public virtual ICollection<GameRound> GameRounds { get; set; }
     }
 }

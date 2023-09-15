@@ -27,7 +27,19 @@ services:
     ports:
       - "7021:7021"
     depends_on: 
-      - "api-gateway"
+      - "api-gateway" 
+      - "crash-game-db"
+
+  crash-game-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: CrashGame
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 554466
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   provider-service:
     image: provider-service
@@ -38,3 +50,6 @@ services:
       - "7189:7189"
     depends_on: 
       - "api-gateway"
+
+volumes:
+  pgdata:
