@@ -3,6 +3,7 @@ using System;
 using CrashGameService.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrashGameService.Migrations
 {
     [DbContext(typeof(CrashDbContext))]
-    partial class CrashDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916221718_Initial1")]
+    partial class Initial1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,6 +68,9 @@ namespace CrashGameService.Migrations
                     b.Property<int>("BetId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("BetId1")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -78,6 +83,9 @@ namespace CrashGameService.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BetId")
+                        .IsUnique();
+
+                    b.HasIndex("BetId1")
                         .IsUnique();
 
                     b.ToTable("CashOuts");
@@ -169,6 +177,10 @@ namespace CrashGameService.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("CrashGameService.Entities.Bet", null)
+                        .WithOne("CashOut")
+                        .HasForeignKey("CrashGameService.Entities.CashOut", "BetId1");
+
                     b.Navigation("Bet");
                 });
 
@@ -191,6 +203,12 @@ namespace CrashGameService.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CurrentRound");
+                });
+
+            modelBuilder.Entity("CrashGameService.Entities.Bet", b =>
+                {
+                    b.Navigation("CashOut")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CrashGameService.Entities.GameRound", b =>

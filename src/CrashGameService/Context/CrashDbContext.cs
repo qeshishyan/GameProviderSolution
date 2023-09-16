@@ -15,7 +15,8 @@ namespace CrashGameService.Context
             modelBuilder.Entity<GameSession>()
                 .HasOne(s => s.CurrentRound)
                 .WithOne()
-                .HasForeignKey<GameSession>(s => s.CurrentRoundId);
+                .HasForeignKey<GameSession>(s => s.CurrentRoundId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<GameRound>()
                 .HasOne(gr => gr.GameSession)
@@ -31,8 +32,8 @@ namespace CrashGameService.Context
 
             modelBuilder.Entity<CashOut>()
                 .HasOne(co => co.Bet)
-                .WithMany(co => co.CashOuts)
-                .HasForeignKey(co => co.BetId)
+                .WithOne()
+                .HasForeignKey<CashOut>(s => s.BetId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

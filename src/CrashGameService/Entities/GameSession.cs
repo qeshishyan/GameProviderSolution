@@ -8,7 +8,7 @@
         public bool BettingTime { get; set; } = false;
         public bool Started { get; set; } = false;
         public DateTimeOffset StartedDate { get; set; }
-        public virtual GameRound CurrentRound { get; set; }
-        public virtual ICollection<GameRound> GameRounds { get; set; }
+        public  GameRound CurrentRound { get; set; }
+        public  ICollection<GameRound> GameRounds { get; set; }
     }
 }

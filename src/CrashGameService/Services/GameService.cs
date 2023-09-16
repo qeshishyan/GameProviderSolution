@@ -32,6 +32,9 @@ namespace CrashGameService.Services
 
         public async ValueTask StartGame()
         {
+            if (_currentGameSession.Started)
+                throw new ApiException(400, "Game already started");
+
             _currentGameSession.Started = true;
             _currentGameSession.StartedDate = DateTime.UtcNow;
 
