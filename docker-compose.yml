@@ -35,7 +35,7 @@ services:
     environment:
       POSTGRES_DB: CrashGame
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 554466
+      POSTGRES_PASSWORD: aqw1!AsdfKp25735lsd112312fASsadsqwewesadsa122Q354584123@AWECcerw2
     ports:
       - "5432:5432"
     volumes:

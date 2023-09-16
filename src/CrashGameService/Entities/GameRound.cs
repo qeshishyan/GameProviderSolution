@@ -10,7 +10,7 @@
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        public virtual GameSession Session { get; set; }
+        public virtual GameSession GameSession { get; set; }
         public virtual ICollection<Bet> Bets { get; set; }
     }
 }

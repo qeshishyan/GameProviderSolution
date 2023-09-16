@@ -5,11 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SignalR Test Client</title>
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.1.9/dist/browser/signalr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #bet_cashOut {
+            margin: 2rem 0;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #multiplier {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>SignalR Test</h1>
+    <h1>Crash game Test</h1>
     <div id="messages"></div>
+
+    <div id="multiplier"></div>
+
+    <div id="timer"></div>
+
+    <!-- BetRequest -->
+    <div id="bet_cashOut">
+        <h3>Bet</h3>
+        <button onclick="sendBetRequest()">Bet</button>
+    </div>
+
+    <!-- StartGame -->
+    <div id="start_game">
+        <button onclick="startGame()">Start Game</button>
+    </div>
+
 
     <script src="app.js"></script>
 </body>

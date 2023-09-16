@@ -15,19 +15,19 @@ namespace CrashGameService.Controllers
         }
 
         [HttpPost("bet")]
-        public async Task<IActionResult> Bet(BetRequest request)
+        public async ValueTask<IActionResult> Bet(BetRequest request)
         {
             return Ok(await _gameService.Bet(request));
         }
 
         [HttpPost("cashOut")]
-        public async Task<IActionResult> CashOut(CashOutRequest request)
+        public async ValueTask<IActionResult> CashOut(CashOutRequest request)
         {
             return Ok(await _gameService.CashOut(request));
         }
 
         [HttpGet("start")]
-        public async Task<IActionResult> StartGame()
+        public async ValueTask<IActionResult> StartGame()
         {
             await _gameService.StartGame();
             return Ok("Game started");

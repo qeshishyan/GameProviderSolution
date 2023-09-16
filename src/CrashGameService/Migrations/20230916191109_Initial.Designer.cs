@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrashGameService.Migrations
 {
     [DbContext(typeof(CrashDbContext))]
-    [Migration("20230915212257_gameRound")]
-    partial class gameRound
+    [Migration("20230916191109_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -101,9 +101,6 @@ namespace CrashGameService.Migrations
                     b.Property<int>("GameSessionId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("GameSessionId1")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsCrashed")
                         .HasColumnType("boolean");
 
@@ -120,9 +117,6 @@ namespace CrashGameService.Migrations
 
                     b.HasIndex("GameSessionId");
 
-                    b.HasIndex("GameSessionId1")
-                        .IsUnique();
-
                     b.ToTable("GameRounds");
                 });
 
@@ -137,6 +131,9 @@ namespace CrashGameService.Migrations
                     b.Property<bool>("BettingTime")
                         .HasColumnType("boolean");
 
+                    b.Property<int?>("CurrentRoundId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ProviderId")
                         .HasColumnType("text");
 
@@ -148,18 +145,21 @@ namespace CrashGameService.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CurrentRoundId")
+                        .IsUnique();
+
                     b.ToTable("GameSessions");
                 });
 
             modelBuilder.Entity("CrashGameService.Entities.Bet", b =>
                 {
-                    b.HasOne("CrashGameService.Entities.GameRound", "Round")
+                    b.HasOne("CrashGameService.Entities.GameRound", "GameRound")
                         .WithMany("Bets")
                         .HasForeignKey("GameRoundId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Round");
+                    b.Navigation("GameRound");
                 });
 
             modelBuilder.Entity("CrashGameService.Entities.CashOut", b =>
@@ -175,17 +175,22 @@ namespace CrashGameService.Migrations
 
             modelBuilder.Entity("CrashGameService.Entities.GameRound", b =>
                 {
-                    b.HasOne("CrashGameService.Entities.GameSession", "Session")
+                    b.HasOne("CrashGameService.Entities.GameSession", "GameSession")
                         .WithMany("GameRounds")
                         .HasForeignKey("GameSessionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("CrashGameService.Entities.GameSession", null)
-                        .WithOne("CurrentRound")
-                        .HasForeignKey("CrashGameService.Entities.GameRound", "GameSessionId1");
+                    b.Navigation("GameSession");
+                });
 
-                    b.Navigation("Session");
+            modelBuilder.Entity("CrashGameService.Entities.GameSession", b =>
+                {
+                    b.HasOne("CrashGameService.Entities.GameRound", "CurrentRound")
+                        .WithOne()
+                        .HasForeignKey("CrashGameService.Entities.GameSession", "CurrentRoundId");
+
+                    b.Navigation("CurrentRound");
                 });
 
             modelBuilder.Entity("CrashGameService.Entities.Bet", b =>
@@ -200,9 +205,6 @@ namespace CrashGameService.Migrations
 
             modelBuilder.Entity("CrashGameService.Entities.GameSession", b =>
                 {
-                    b.Navigation("CurrentRound")
-                        .IsRequired();
-
                     b.Navigation("GameRounds");
                 });
 #pragma warning restore 612, 618
