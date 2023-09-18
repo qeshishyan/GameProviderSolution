@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CrashGameService.DAL\CrashGameService.DAL.csproj" />
+    <ProjectReference Include="..\CrashGameService.Service\CrashGameService.Service.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
   </ItemGroup>
 

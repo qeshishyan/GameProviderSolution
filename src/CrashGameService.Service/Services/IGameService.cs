@@ -1,6 +1,6 @@
-﻿using CrashGameService.Models;
+﻿using CrashGameService.Service.Models;
 
-namespace CrashGameService.Services
+namespace CrashGameService.Service.Services
 {
     public interface IGameService
     {

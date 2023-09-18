@@ -1,7 +1,7 @@
 using CrashGameService.DAL.Extensions;
-using CrashGameService.Extensions;
-using CrashGameService.Hubs;
 using CrashGameService.Repository.Context;
+using CrashGameService.Service.Extensions;
+using CrashGameService.Service.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Shared.Middlewares;
 
@@ -40,6 +40,7 @@ using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().Creat
     context.Database.Migrate();
 }
 #endif
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

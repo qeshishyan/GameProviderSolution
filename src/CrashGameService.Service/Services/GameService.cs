@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using CrashGameService.DAL.IRepository;
-using CrashGameService.Hubs;
-using CrashGameService.Models;
 using CrashGameService.Repository.Entities;
+using CrashGameService.Service.Hubs;
+using CrashGameService.Service.Models;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Shared.Exceptions;
 
-namespace CrashGameService.Services
+namespace CrashGameService.Service.Services
 {
     public class GameService : IGameService
     {

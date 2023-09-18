@@ -14,12 +14,6 @@ RUN dotnet restore "UserService/UserService.csproj"
 WORKDIR "/src/Shared"
 RUN dotnet build "Shared.csproj" -c Release
 
-WORKDIR "/src/UserService.Domain"
-RUN dotnet build "UserService.Domain.csproj" -c Release
-
-WORKDIR "/src/UserService.Infrastructure"
-RUN dotnet build "UserService.Infrastructure.csproj" -c Release
-
 WORKDIR "/src/UserService"
 COPY UserService/ .
 RUN dotnet build "UserService.csproj" -c Release -o /app/build

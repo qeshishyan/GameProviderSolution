@@ -8,17 +8,21 @@ WORKDIR /src
 COPY ["CrashGameService/CrashGameService.csproj", "CrashGameService/"]
 COPY ["Shared/Shared.csproj", "Shared/"]
 COPY ["Shared/", "Shared/"]
+COPY ["CrashGameService.Service/CrashGameService.Service.csproj", "CrashGameService.Service/"]
+COPY ["CrashGameService.Service/", "CrashGameService.Service/"]
+COPY ["CrashGameService.DAL/CrashGameService.DAL.csproj", "CrashGameService.DAL/"]
+COPY ["CrashGameService.DAL/", "CrashGameService.DAL/"]
 
 RUN dotnet restore "CrashGameService/CrashGameService.csproj"
 
 WORKDIR "/src/Shared"
 RUN dotnet build "Shared.csproj" -c Release
 
-WORKDIR "/src/CrashGameService.Domain"
-RUN dotnet build "CrashGameService.Domain.csproj" -c Release
+WORKDIR "/src/CrashGameService.Service"
+RUN dotnet build "CrashGameService.Service.csproj" -c Release
 
-WORKDIR "/src/CrashGameService.Infrastructure"
-RUN dotnet build "CrashGameService.Infrastructure.csproj" -c Release
+WORKDIR "/src/CrashGameService.DAL"
+RUN dotnet build "CrashGameService.DAL.csproj" -c Release
 
 WORKDIR "/src/CrashGameService"
 COPY CrashGameService/ .

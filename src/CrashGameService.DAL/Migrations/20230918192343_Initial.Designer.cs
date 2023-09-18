@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrashGameService.DAL.Migrations
 {
     [DbContext(typeof(CrashDbContext))]
-    [Migration("20230918182601_Initial")]
+    [Migration("20230918192343_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

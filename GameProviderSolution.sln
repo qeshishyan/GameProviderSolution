@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\Shared\Shared
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameService.DAL", "src\CrashGameService.DAL\CrashGameService.DAL.csproj", "{5D63750F-2AE4-4A7A-A211-509A2F445B4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameService.Service", "src\CrashGameService.Service\CrashGameService.Service.csproj", "{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{35938F92-D02C-4C46-BC8C-2978498B643E} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{64203F7E-F521-44E5-9DC7-12A8927F2886} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
+		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8873AB48-1999-449A-AEDA-DFBF1A000A06}

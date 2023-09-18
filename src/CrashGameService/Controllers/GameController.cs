@@ -1,5 +1,5 @@
-﻿using CrashGameService.Models;
-using CrashGameService.Services;
+﻿using CrashGameService.Service.Models;
+using CrashGameService.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrashGameService.Controllers
@@ -30,7 +30,7 @@ namespace CrashGameService.Controllers
         public async ValueTask<IActionResult> StartGame()
         {
             await _gameService.StartGame();
-            return Ok("Game started");
+            return Ok(new { Message = "Game started" });
         }
     }
 }

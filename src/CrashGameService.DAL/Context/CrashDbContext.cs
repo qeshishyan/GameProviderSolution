@@ -40,7 +40,7 @@ namespace CrashGameService.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //crash-game-db
-            optionsBuilder.UseNpgsql("Host=localhost:5432;Username=postgres;Password=aqw1!AsdfKp25735lsd112312fASsadsqwewesadsa122Q354584123@AWECcerw2;Database=CrashGame;");
+            optionsBuilder.UseNpgsql("Host=crash-game-db:5432;Username=postgres;Password=554466;Database=CrashGame;");
         }
     }
 }

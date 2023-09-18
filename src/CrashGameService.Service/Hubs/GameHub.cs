@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-namespace CrashGameService.Hubs
+namespace CrashGameService.Service.Hubs
 {
     public class GameHub : Hub
     {

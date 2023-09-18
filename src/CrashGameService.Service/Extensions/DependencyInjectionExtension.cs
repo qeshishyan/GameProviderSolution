@@ -1,6 +1,7 @@
-﻿using CrashGameService.Services;
+﻿using CrashGameService.Service.Services;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace CrashGameService.Extensions
+namespace CrashGameService.Service.Extensions
 {
     public static class DependencyInjectionExtension
     {

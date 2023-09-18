@@ -1,4 +1,4 @@
-﻿namespace CrashGameService.Models
+﻿namespace CrashGameService.Service.Models
 {
     public class CashOutRequest
     {
