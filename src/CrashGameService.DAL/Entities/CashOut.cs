@@ -1,4 +1,4 @@
-﻿namespace CrashGameService.Entities
+﻿namespace CrashGameService.Repository.Entities
 {
     public class CashOut
     {

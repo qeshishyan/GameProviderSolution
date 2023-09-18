@@ -1,7 +1,7 @@
-﻿using CrashGameService.Entities;
+﻿using CrashGameService.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CrashGameService.Context
+namespace CrashGameService.Repository.Context
 {
     public class CrashDbContext : DbContext
     {

@@ -1,6 +1,7 @@
-using CrashGameService.Context;
+using CrashGameService.DAL.Extensions;
 using CrashGameService.Extensions;
 using CrashGameService.Hubs;
+using CrashGameService.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 using Shared.Middlewares;
 
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServices();
+builder.Services.AddRepositories();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddCors(options =>
 {
@@ -28,15 +30,16 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddSignalR();
 
-
-
 var app = builder.Build();
 
+#if DEBUG
+#else
 using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<CrashDbContext>();
     context.Database.Migrate();
 }
+#endif
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

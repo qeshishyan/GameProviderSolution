@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CrashGameService.Migrations
+namespace CrashGameService.DAL.Migrations
 {
+    /// <inheritdoc />
     public partial class Initial : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -88,7 +90,8 @@ namespace CrashGameService.Migrations
                         name: "FK_GameSessions_GameRounds_CurrentRoundId",
                         column: x => x.CurrentRoundId,
                         principalTable: "GameRounds",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -99,7 +102,8 @@ namespace CrashGameService.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_CashOuts_BetId",
                 table: "CashOuts",
-                column: "BetId");
+                column: "BetId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameRounds_GameSessionId",
@@ -129,6 +133,7 @@ namespace CrashGameService.Migrations
                 onDelete: ReferentialAction.Restrict);
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
