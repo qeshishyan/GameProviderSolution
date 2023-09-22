@@ -1,8 +1,11 @@
 # Use an official Python runtime as a parent image
 FROM python:3.9-slim
+WORKDIR /src
+
+COPY ["CrashGameLogic.Phyton/app.py", "CrashGameLogic.Phyton/"]
 
 # Set the working directory in the container
-WORKDIR /usr/src/CrashGameLogic.Phyton
+WORKDIR /src/CrashGameLogic.Phyton
 
 # Copy the current directory contents into the container
 COPY . .
