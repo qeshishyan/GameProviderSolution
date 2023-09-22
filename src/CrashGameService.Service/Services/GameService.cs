@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CrashGameService.DAL.IRepository;
 using CrashGameService.Repository.Entities;
+using CrashGameService.Service.HttpClients;
 using CrashGameService.Service.Hubs;
 using CrashGameService.Service.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -15,11 +16,12 @@ namespace CrashGameService.Service.Services
         private readonly IHubContext<GameHub> _hubContext;
         private readonly IMapper _mapper;
         private readonly IGameRepository _repository;
+        private readonly IGameLogicPhytonClient _client;
 
         private double brokenJet;
 
         public GameService(IHubContext<GameHub> hubContext,
-            IMapper mapper, IGameRepository repository)
+            IMapper mapper, IGameRepository repository, IGameLogicPhytonClient client)
         {
             _currentGameSession = new GameSession
             {
@@ -28,6 +30,7 @@ namespace CrashGameService.Service.Services
             _hubContext = hubContext;
             _mapper = mapper;
             _repository = repository;
+            _client = client;
         }
 
         public async ValueTask StartGame()
@@ -145,8 +148,11 @@ namespace CrashGameService.Service.Services
 
         private async ValueTask CreateRound()
         {
-            CrashGameLogic logic = new CrashGameLogic();
-            (double x1, double x2, double x3) = logic.GenerateOdds();
+            (double x1, double x2, double x3) = await _client.GetOddsAsync();
+            Console.WriteLine("x1 " + x1);
+            Console.WriteLine("x2 " + x2);
+            Console.WriteLine("x3 " + x3);
+
             var array = new[] { x1, x2, x3 };
             brokenJet = array.Max();
 
@@ -192,24 +198,6 @@ namespace CrashGameService.Service.Services
 
             await Task.WhenAll(saveTask, offTask.AsTask());
             await StartRound();
-        }
-
-
-    }
-
-    public class CrashGameLogic
-    {
-        private Random random = new Random();
-        double BankBalance = 1000;
-        public (double, double, double) GenerateOdds()
-        {
-            double adjustmentFactor = BankBalance > 1000 ? 0.95 : (BankBalance < 500 ? 1.05 : 1); // Adjust these values accordingly
-
-            double x1 = 1 + random.NextDouble() * 5 * adjustmentFactor;
-            double x2 = (2.0 / 3 * x1) + random.NextDouble() * 3 * adjustmentFactor;
-            double x3 = (1.0 / 2 * x2) + random.NextDouble() * 2 * adjustmentFactor;
-
-            return (x1, x2, x3);
         }
     }
 }

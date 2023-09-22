@@ -18,9 +18,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "src\APIGatewa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shared", "src\Shared\Shared.csproj", "{64203F7E-F521-44E5-9DC7-12A8927F2886}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameService.DAL", "src\CrashGameService.DAL\CrashGameService.DAL.csproj", "{5D63750F-2AE4-4A7A-A211-509A2F445B4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashGameService.DAL", "src\CrashGameService.DAL\CrashGameService.DAL.csproj", "{5D63750F-2AE4-4A7A-A211-509A2F445B4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashGameService.Service", "src\CrashGameService.Service\CrashGameService.Service.csproj", "{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrashGameService.Service", "src\CrashGameService.Service\CrashGameService.Service.csproj", "{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrashGameLogic.Phyton", "CrashGameLogic.Phyton", "{50BA453C-6C64-4095-BBB4-912C049B6762}"
+	ProjectSection(SolutionItems) = preProject
+		src\CrashGameLogic.Phyton\app.py = src\CrashGameLogic.Phyton\app.py
+		src\CrashGameLogic.Phyton\Dockerfile = src\CrashGameLogic.Phyton\Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +74,7 @@ Global
 		{64203F7E-F521-44E5-9DC7-12A8927F2886} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
+		{50BA453C-6C64-4095-BBB4-912C049B6762} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8873AB48-1999-449A-AEDA-DFBF1A000A06}

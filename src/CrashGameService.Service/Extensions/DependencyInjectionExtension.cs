@@ -7,7 +7,7 @@ namespace CrashGameService.Service.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddSingleton<IGameService, GameService>();
+            services.AddScoped<IGameService, GameService>();
         }
     }
 }

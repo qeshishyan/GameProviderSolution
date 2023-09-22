@@ -1,10 +1,17 @@
-﻿using CrashGameService.Repository.Entities;
+﻿using CrashGameService.DAL.Context;
+using CrashGameService.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace CrashGameService.Repository.Context
 {
     public class CrashDbContext : DbContext
     {
+        private readonly ContextOptions _options;
+        public CrashDbContext(IOptions<ContextOptions> options)
+        {
+            _options = options.Value;
+        }
         public DbSet<GameSession> GameSessions { get; set; }
         public DbSet<Bet> Bets { get; set; }
         public DbSet<GameRound> GameRounds { get; set; }
@@ -40,7 +47,7 @@ namespace CrashGameService.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //crash-game-db
-            optionsBuilder.UseNpgsql("Host=crash-game-db:5432;Username=postgres;Password=554466;Database=CrashGame;");
+            optionsBuilder.UseNpgsql(_options.ConnectionString);
         }
     }
 }
