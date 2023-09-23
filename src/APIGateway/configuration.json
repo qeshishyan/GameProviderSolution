@@ -1,0 +1,69 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/user",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/user/getuser",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user-service",
+          //"Host": "localhost",
+          "Port": 5158
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/user/balance",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/user/getUserBalance",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "user-service",
+          //"Host": "localhost",
+          "Port": 5158
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/start",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/game/start",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/cashOut",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/cashOut",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/bet",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/bet",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    }
+  ]
+}
