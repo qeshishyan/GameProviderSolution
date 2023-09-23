@@ -1,4 +1,5 @@
-﻿using CrashGameService.Service.Models;
+﻿using CrashGameService.Service;
+using CrashGameService.Service.Models;
 using CrashGameService.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,21 +10,24 @@ namespace CrashGameService.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _gameService;
-        public GameController(IGameService gameService)
+        private readonly IBetService _betService;
+
+        public GameController(IGameService gameService, IBetService betService)
         {
             _gameService = gameService;
+            _betService = betService;
         }
 
         [HttpPost("bet")]
         public async ValueTask<IActionResult> Bet(BetRequest request)
         {
-            return Ok(await _gameService.Bet(request));
+            return Ok(await _betService.Bet(request));
         }
 
         [HttpPost("cashOut")]
         public async ValueTask<IActionResult> CashOut(CashOutRequest request)
         {
-            return Ok(await _gameService.CashOut(request));
+            return Ok(await _betService.CashOut(request));
         }
 
         [HttpGet("start")]

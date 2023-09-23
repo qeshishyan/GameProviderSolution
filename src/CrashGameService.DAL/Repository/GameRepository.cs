@@ -1,6 +1,7 @@
 ﻿using CrashGameService.DAL.IRepository;
 using CrashGameService.Repository.Context;
 using CrashGameService.Repository.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace CrashGameService.DAL.Repository
 {
@@ -16,6 +17,38 @@ namespace CrashGameService.DAL.Repository
         {
             await _dbContext.GameSessions.AddAsync(gameSession);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<GameRound> GetRoundWithSessionAsync(int roundId)
+        {
+            try
+            {
+                return await _dbContext.GameRounds
+                    .Include(x=> x.GameSession)
+                    .Where(x => x.Id == roundId)
+                    .FirstAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<Bet> GetBetWithRoundAsync(int betId)
+        {
+            try
+            {
+                return await _dbContext.Bets
+                    .Include(x => x.GameRound)
+                    .Where(x => x.Id == betId)
+                    .FirstAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task AddBetAsync(Bet bet)

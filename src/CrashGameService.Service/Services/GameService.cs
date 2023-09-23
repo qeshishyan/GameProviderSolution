@@ -1,11 +1,6 @@
-﻿using AutoMapper;
-using CrashGameService.DAL.IRepository;
+﻿using CrashGameService.DAL.IRepository;
 using CrashGameService.Repository.Entities;
 using CrashGameService.Service.HttpClients;
-using CrashGameService.Service.Hubs;
-using CrashGameService.Service.Models;
-using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 using Shared.Exceptions;
 
 namespace CrashGameService.Service.Services
@@ -13,24 +8,22 @@ namespace CrashGameService.Service.Services
     public class GameService : IGameService
     {
         private readonly GameSession _currentGameSession;
-        private readonly IHubContext<GameHub> _hubContext;
-        private readonly IMapper _mapper;
         private readonly IGameRepository _repository;
         private readonly IGameLogicPhytonClient _client;
+        private readonly IGameHubService _hubService;
 
         private double brokenJet;
 
-        public GameService(IHubContext<GameHub> hubContext,
-            IMapper mapper, IGameRepository repository, IGameLogicPhytonClient client)
+        public GameService(IGameRepository repository,
+            IGameLogicPhytonClient client, IGameHubService hubService)
         {
             _currentGameSession = new GameSession
             {
                 ProviderId = "providerId_4578d687ad65",
             };
-            _hubContext = hubContext;
-            _mapper = mapper;
             _repository = repository;
             _client = client;
+            _hubService = hubService;
         }
 
         public async ValueTask StartGame()
@@ -46,62 +39,7 @@ namespace CrashGameService.Service.Services
             await StartBettingTime();
         }
 
-        public async ValueTask<BetResponse> Bet(BetRequest betRequest)
-        {
-            ValidateBet(betRequest);
 
-            var bet = _mapper.Map<Bet>(betRequest);
-            bet.BetDate = DateTime.UtcNow;
-            bet.GameRound = _currentGameSession.CurrentRound;
-
-            var saveTask = _repository.AddBetAsync(bet);
-
-            //User id must be changed to real data
-            object obj = new { Message = "BET", Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
-            var sendTask = SendToHub("BET", obj);
-
-            await Task.WhenAll(saveTask, sendTask);
-
-            // Save bet in db
-            var response = new BetResponse { BetDate = bet.BetDate, GameRoundId = bet.GameRoundId, BetId = bet.Id };
-            return response;
-        }
-
-        private void ValidateBet(BetRequest bet)
-        {
-            if (!_currentGameSession.Started)
-                throw new ApiException(400, "Game not started");
-
-            if (!_currentGameSession.CurrentRound.Id.Equals(bet.GameRoundId))
-                throw new ApiException(400, "Invalid game round id");
-
-            if (!_currentGameSession.BettingTime)
-                throw new ApiException(400, "Betting time is closed");
-
-            if (bet.Value <= 0)
-                throw new ApiException(400, "Invalid bet value");
-
-            if (bet.Multiplier > _currentGameSession.CurrentRound.Multiplier)
-                throw new ApiException(400, "Invalid bet multiplier");
-        }
-
-        public async ValueTask<CashOutResponse> CashOut(CashOutRequest cashOutRequest)
-        {
-            if (cashOutRequest.Multiplier > _currentGameSession.CurrentRound.Multiplier)
-                throw new ApiException(400, "Invalid multiplier");
-
-            var cashOut = _mapper.Map<CashOut>(cashOutRequest);
-            var task = _repository.AddCashOutAsync(cashOut);
-
-            var bet = _currentGameSession.CurrentRound.Bets.Where(x => x.Id == cashOut.BetId).FirstOrDefault();
-            if (bet is null)
-                throw new ApiException(400, "Bet not found");
-
-            bet.Win = true;
-
-            await task;
-            return new CashOutResponse { Value = bet.Value * cashOut.Multiplier };
-        }
 
         private async ValueTask StartRound()
         {
@@ -111,11 +49,8 @@ namespace CrashGameService.Service.Services
 
             var update = _repository.UpdateRoundAsync(round);
 
-            //Send socket for round started
-
             var obj = new { Message = "Round started" };
-
-            Task sendTask = SendToHub("RoundStarted", obj);
+            Task sendTask = _hubService.SendToHub("StartRound", obj);
             await Task.WhenAll(update, sendTask);
 
             await PlayRound(round);
@@ -128,17 +63,13 @@ namespace CrashGameService.Service.Services
             {
                 round.Multiplier += 0.01d;
                 var obj = new { Message = "Multiplier", Multiplier = round.Multiplier.ToString("F2") };
-                await SendToHub("ReceiveMultiplier", obj);
+                await _hubService.SendToHub("ReceiveMultiplier", obj);
                 Thread.Sleep(20);
             }
             await CrashGame(round);
         }
 
-        private async Task SendToHub(string method, object obj)
-        {
-            var multipJson = JsonConvert.SerializeObject(obj);
-            await _hubContext.Clients.All.SendAsync(method, multipJson);
-        }
+        
 
         private async ValueTask CrashGame(GameRound round)
         {
@@ -146,8 +77,8 @@ namespace CrashGameService.Service.Services
             round.EndDate = DateTime.UtcNow;
 
             var obj = new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") };
-            Task sendTask = SendToHub("CrashGame", obj);
-            
+            Task sendTask = _hubService.SendToHub("CrashGame", obj);
+
             Task update = _repository.UpdateRoundAsync(round);
             await Task.WhenAll(update, sendTask);
         }
@@ -177,7 +108,7 @@ namespace CrashGameService.Service.Services
             Timer _timer = new(StopBettingTimeCallback, null, 5000, Timeout.Infinite);
 
             var obj = new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id, TimeLeft = 5 };
-            Task sendTask = SendToHub("StartBettingTime", obj);
+            Task sendTask = _hubService.SendToHub("StartBettingTime", obj);
 
             ValueTask betTimeTask = OnBettingTime();
             await Task.WhenAll(sendTask, betTimeTask.AsTask());
@@ -197,7 +128,7 @@ namespace CrashGameService.Service.Services
         private async void StopBettingTimeCallback(object? state)
         {
             var obj = new { Message = "Betting time stoped" };
-            Task saveTask = SendToHub("StopBettingTime", obj);
+            Task saveTask = _hubService.SendToHub("StopBettingTime", obj);
             ValueTask offTask = OffBettingTime();
 
             await Task.WhenAll(saveTask, offTask.AsTask());
