@@ -54,13 +54,11 @@ namespace CrashGameService.Service.Services
             bet.BetDate = DateTime.UtcNow;
             bet.GameRound = _currentGameSession.CurrentRound;
 
-            
             var saveTask = _repository.AddBetAsync(bet);
 
             //User id must be changed to real data
             object obj = new { Message = "BET", Value = bet.Value, User = "User_" + Guid.NewGuid().ToString() };
-            var betJson = JsonConvert.SerializeObject(obj);
-            var sendTask = _hubContext.Clients.All.SendAsync("BET", betJson);
+            var sendTask = SendToHub("BET", obj);
 
             await Task.WhenAll(saveTask, sendTask);
 
@@ -114,8 +112,10 @@ namespace CrashGameService.Service.Services
             var update = _repository.UpdateRoundAsync(round);
 
             //Send socket for round started
-            var json = JsonConvert.SerializeObject(new { Message = "Round started" });
-            Task sendTask = _hubContext.Clients.All.SendAsync("StartRound", json);
+
+            var obj = new { Message = "Round started" };
+
+            Task sendTask = SendToHub("RoundStarted", obj);
             await Task.WhenAll(update, sendTask);
 
             await PlayRound(round);
@@ -126,12 +126,18 @@ namespace CrashGameService.Service.Services
         {
             while (round.Multiplier < brokenJet)
             {
-                round.Multiplier += 0.1d;
-                var multipJson = JsonConvert.SerializeObject(new { Message = "Multiplier", Multiplier = round.Multiplier.ToString("F1") });
-                await _hubContext.Clients.All.SendAsync("ReceiveMultiplier", multipJson);
-                Thread.Sleep(200);
+                round.Multiplier += 0.01d;
+                var obj = new { Message = "Multiplier", Multiplier = round.Multiplier.ToString("F2") };
+                await SendToHub("ReceiveMultiplier", obj);
+                Thread.Sleep(20);
             }
             await CrashGame(round);
+        }
+
+        private async Task SendToHub(string method, object obj)
+        {
+            var multipJson = JsonConvert.SerializeObject(obj);
+            await _hubContext.Clients.All.SendAsync(method, multipJson);
         }
 
         private async ValueTask CrashGame(GameRound round)
@@ -139,8 +145,8 @@ namespace CrashGameService.Service.Services
             round.IsCrashed = true;
             round.EndDate = DateTime.UtcNow;
 
-            var crashJson = JsonConvert.SerializeObject(new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F1") });
-            Task sendTask = _hubContext.Clients.All.SendAsync("CrashGame", crashJson);
+            var obj = new { Message = "Game crashed", Multiplier = round.Multiplier.ToString("F2") };
+            Task sendTask = SendToHub("CrashGame", obj);
             
             Task update = _repository.UpdateRoundAsync(round);
             await Task.WhenAll(update, sendTask);
@@ -158,8 +164,6 @@ namespace CrashGameService.Service.Services
 
             _currentGameSession.CurrentRound = new()
             {
-                // Database key
-                //Id = new Random().Next(10000, 99999),
                 GameSessionId = _currentGameSession.Id,
                 CreatedDate = DateTime.UtcNow
             };
@@ -172,8 +176,9 @@ namespace CrashGameService.Service.Services
             await CreateRound();
             Timer _timer = new(StopBettingTimeCallback, null, 5000, Timeout.Infinite);
 
-            string crashJson = JsonConvert.SerializeObject(new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id, TimeLeft = 5 });
-            Task sendTask = _hubContext.Clients.All.SendAsync("StartBettingTime", crashJson);
+            var obj = new { Message = "Betting time started", CurrentRoundId = _currentGameSession.CurrentRound.Id, TimeLeft = 5 };
+            Task sendTask = SendToHub("StartBettingTime", obj);
+
             ValueTask betTimeTask = OnBettingTime();
             await Task.WhenAll(sendTask, betTimeTask.AsTask());
         }
@@ -191,9 +196,8 @@ namespace CrashGameService.Service.Services
 
         private async void StopBettingTimeCallback(object? state)
         {
-            string crashJson = JsonConvert.SerializeObject(new { Message = "Betting time stoped" });
-
-            Task saveTask = _hubContext.Clients.All.SendAsync("StopBettingTime", crashJson);
+            var obj = new { Message = "Betting time stoped" };
+            Task saveTask = SendToHub("StopBettingTime", obj);
             ValueTask offTask = OffBettingTime();
 
             await Task.WhenAll(saveTask, offTask.AsTask());

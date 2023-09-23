@@ -11,7 +11,7 @@ namespace CrashGameService.DAL.Extensions
     {
         public static void AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<CrashDbContext>();
+            services.AddSingleton<CrashDbContext>();
             services.AddScoped<IGameRepository, GameRepository>();
             services.Configure<ContextOptions>(options =>
             {
