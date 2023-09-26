@@ -29,6 +29,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrashGameLogic.Phyton", "Cr
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrashGameReact.App", "CrashGameReact.App", "{E5559D0A-C840-4FB0-BA6B-DE2A9AC32FA4}"
+	ProjectSection(SolutionItems) = preProject
+		src\CrashGameReact.App\.dockerignore = src\CrashGameReact.App\.dockerignore
+		src\CrashGameReact.App\.eslintignore = src\CrashGameReact.App\.eslintignore
+		src\CrashGameReact.App\.eslintrc.json = src\CrashGameReact.App\.eslintrc.json
+		src\CrashGameReact.App\.gitignore = src\CrashGameReact.App\.gitignore
+		src\CrashGameReact.App\.lintstagedrc.json = src\CrashGameReact.App\.lintstagedrc.json
+		src\CrashGameReact.App\.prettierignore = src\CrashGameReact.App\.prettierignore
+		src\CrashGameReact.App\.prettierrc.json = src\CrashGameReact.App\.prettierrc.json
+		src\CrashGameReact.App\docker-compose-dev.yml = src\CrashGameReact.App\docker-compose-dev.yml
+		src\CrashGameReact.App\docker-compose.yml = src\CrashGameReact.App\docker-compose.yml
+		src\CrashGameReact.App\Dockerfile = src\CrashGameReact.App\Dockerfile
+		src\CrashGameReact.App\Dockerfile.dev = src\CrashGameReact.App\Dockerfile.dev
+		src\CrashGameReact.App\package-lock.json = src\CrashGameReact.App\package-lock.json
+		src\CrashGameReact.App\package.json = src\CrashGameReact.App\package.json
+		src\CrashGameReact.App\README.md = src\CrashGameReact.App\README.md
+		src\CrashGameReact.App\tsconfig.json = src\CrashGameReact.App\tsconfig.json
+		src\CrashGameReact.App\yarn.lock = src\CrashGameReact.App\yarn.lock
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
