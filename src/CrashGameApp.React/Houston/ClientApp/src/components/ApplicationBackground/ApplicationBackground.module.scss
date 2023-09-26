@@ -1,0 +1,77 @@
+.desktopWrapper {
+  background: transparent url('/assets/images/main-background-cycle.png') repeat-y
+    center;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-position-y: bottom;
+}
+
+.gameActionWrapper {
+  animation: slideDown 10s infinite linear;
+}
+
+.gameActionEndWrapper {
+  animation: slideDown 10s infinite linear, darken 3s ease-in-out;
+}
+
+@keyframes slideDown {
+  0% {
+    background-position-y: bottom;
+  }
+  100% {
+    background-position-y: var(--slidedown-bg-height);
+  }
+}
+
+@keyframes darken {
+  100% {
+    background-color: black;
+    background-blend-mode: darken, luminosity;
+  }
+}
+
+.logoMain {
+  text-align: center;
+  margin-top: 5%;
+  height: 15%;
+}
+
+.logoMain img {
+  width: auto;
+  height: 100%;
+}
+
+.earthFooter {
+  height: 100%;
+  width: 100%;
+  background: transparent url('/assets/images/earth-footer.png') no-repeat bottom;
+  background-size: contain;
+  position: fixed;
+  z-index: 1;
+  animation: none;
+}
+
+.gameActionEarthFooter {
+  max-width: 100%;
+  height: 100%;
+  width: 100%;
+  background: transparent url('/assets/images/earth-footer.png') no-repeat bottom;
+  background-size: contain;
+  position: fixed;
+  z-index: 1;
+  animation: slideFooterDown 3s forwards;
+}
+
+@keyframes slideFooterDown {
+  0% {
+    background-position-y: bottom;
+  }
+  100% {
+    background-position-y: 200%;
+  }
+}

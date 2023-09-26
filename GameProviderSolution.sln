@@ -48,6 +48,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrashGameReact.App", "Crash
 		src\CrashGameReact.App\yarn.lock = src\CrashGameReact.App\yarn.lock
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Houston", "src\CrashGameApp.React\Houston\Houston.csproj", "{1BD0A953-C457-4C25-B732-4AEE929E6FD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BD0A953-C457-4C25-B732-4AEE929E6FD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BD0A953-C457-4C25-B732-4AEE929E6FD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BD0A953-C457-4C25-B732-4AEE929E6FD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BD0A953-C457-4C25-B732-4AEE929E6FD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{50BA453C-6C64-4095-BBB4-912C049B6762} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{E5559D0A-C840-4FB0-BA6B-DE2A9AC32FA4} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
+		{1BD0A953-C457-4C25-B732-4AEE929E6FD6} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8873AB48-1999-449A-AEDA-DFBF1A000A06}

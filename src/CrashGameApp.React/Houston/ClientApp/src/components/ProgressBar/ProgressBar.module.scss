@@ -1,0 +1,22 @@
+@use 'src/styles/vars';
+
+.progress {
+  background: none !important;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 10px !important;
+  border: 1px solid vars.$neonBlue;
+  border-radius: 0 !important;
+  box-shadow: 0 0 6px 1px vars.$neonBlueRGB;
+}
+
+.progressValue {
+  animation: load 5s normal forwards;
+  box-shadow: 0 0 1px 0 vars.$shadowBlue;
+  opacity: 1;
+  background: vars.$neonBlue;
+  margin-top: 1px;
+  height: 6px;
+}

@@ -1,0 +1,10 @@
+@use 'src/styles/vars';
+
+.betCoefficient {
+  align-self: flex-end;
+}
+
+.betCoefficient span {
+  font: 32px vars.$fontName;
+  color: vars.$neonBlue;
+}

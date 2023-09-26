@@ -1,0 +1,76 @@
+@use 'src/styles/vars';
+
+.rocketContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rocketMain,
+.rocketMain img {
+  filter: drop-shadow(1px 1px 6px vars.$neonBlue);
+  height: 100%;
+  width: auto;
+  z-index: 1000;
+
+}
+
+.fireMain,
+.fireMain img {
+  filter: drop-shadow(1px 1px 6px vars.$neonBlue);
+  height: 100%;
+  width: auto;
+  padding-left: 1.5%;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+.startExplosion {
+  margin-top: -40%;
+  z-index: -1;
+}
+
+.weHaveAProblem {
+  height: 20%;
+  z-index: 8;
+  position: fixed;
+  top: 15%;
+}
+
+.endExplosion {
+  z-index: 7;
+  position: fixed;
+  top: 30%;
+  animation: approach 1s ease infinite alternate;
+}
+
+@keyframes approach {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.endExplosionRight {
+  z-index: 6;
+  animation: rotation 10s infinite linear;
+}
+
+.endExplosionLeft {
+  z-index: 5;
+  animation: rotation 10s infinite reverse;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
