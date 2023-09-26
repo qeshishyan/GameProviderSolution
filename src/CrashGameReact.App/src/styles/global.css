@@ -1,0 +1,70 @@
+.progress-lobby-wrapper {
+  width: 40%;
+  z-index: 3;
+  height: 20%;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-top: 8%;
+  margin-bottom: 7%;
+}
+
+.rocket-lobby-wrap {
+  height: 35% !important;
+  margin-top: 5%;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.game-wrapper {
+  width: 95%;
+  height: 100%;
+  z-index: 3;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-roof-row {
+  width: 100%;
+  height: 14%;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  margin-top: 1%;
+}
+
+.game-settings {
+  width: 15%;
+  margin-left: 5%;
+}
+
+.game-roof-tiles {
+  width: 80%;
+  height: 100%;
+  text-align-last: center;
+}
+
+.game-middle-row {
+  width: 100%;
+  height: 85%;
+  display: flex;
+  flex-direction: row;
+}
+
+.game-left-column {
+  width: 20%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-right-column {
+  width: 15%;
+}
+
+.game-playable-container-wrapper {
+  width: 65%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

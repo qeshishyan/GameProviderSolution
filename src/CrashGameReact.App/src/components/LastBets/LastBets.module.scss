@@ -1,0 +1,63 @@
+@use 'src/styles/vars';
+
+.lastBetsContainer {
+  background: transparent url('/assets/images/left-column/bets-panel.png') no-repeat
+    center;
+  background-size: contain;
+  width: 100%;
+  margin-top: 5%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+}
+
+.lastBetsContainer img {
+  width: auto;
+  height: 100%;
+}
+
+.lastBetsContainer > span {
+  font: 100% vars.$fontName;
+  color: vars.$neonBlue;
+  width: 100%;
+  margin: 7% 20% 0;
+}
+
+.lastBetsContainer table {
+  width: 60%;
+  height: 70%;
+  margin: 5% 20% 0;
+  border-collapse: separate;
+  border-spacing: 0 3px;
+}
+
+.lastBetsContainer td {
+  font: 80% vars.$fontName;
+  color: vars.$neonBlue;
+}
+
+.lastBetsContainer th {
+  font: 80% vars.$fontName;
+  color: vars.$neonBlue;
+  vertical-align: bottom;
+}
+
+.lastBetsContainer tr {
+  background-color: vars.$darkBlue;
+  border: 0.5px outset vars.$neonBlue;
+}
+
+.lastBetsContainer tr:first-child {
+  background: none !important;
+  border: none !important;
+}
+
+.topBet {
+  background: linear-gradient(270deg, #9b2727 0%, #00e2fd 100%);
+  border: none !important;
+}
+
+.topBet td {
+  color: white;
+}

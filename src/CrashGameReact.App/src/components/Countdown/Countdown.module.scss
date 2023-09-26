@@ -1,0 +1,11 @@
+@use 'src/styles/vars';
+
+.roundTimer {
+  height: 10%;
+  margin-top: 5%;
+}
+
+.roundTimer span {
+  font: 72px vars.$fontName;
+  color: vars.$neonBlue;
+}

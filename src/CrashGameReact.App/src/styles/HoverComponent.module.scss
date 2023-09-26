@@ -1,0 +1,10 @@
+@use 'src/styles/vars';
+
+.hoverComponent {
+  cursor: pointer;
+  filter: drop-shadow(1px 1px 6px black);
+}
+
+.hoverComponent:hover {
+  filter: drop-shadow(1px 1px 15px vars.$neonBlue);
+}
