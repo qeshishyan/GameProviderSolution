@@ -59,5 +59,13 @@ services:
     ports:
       - "5000:5000"
 
+  webapp:
+    image: nginx:alpine
+    build:
+      context: ./src
+      dockerfile: CrashGameReact.App/Dockerfile
+    ports:
+      - "8080:80"
+
 volumes:
   pgdata:
