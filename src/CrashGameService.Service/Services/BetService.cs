@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using CrashGameService.DAL.IRepository;
 using CrashGameService.Repository.Entities;
-using CrashGameService.Service.Hubs;
 using CrashGameService.Service.Models;
-using Microsoft.AspNetCore.SignalR;
 using Shared.Exceptions;
 
 namespace CrashGameService.Service.Services
@@ -24,12 +22,16 @@ namespace CrashGameService.Service.Services
 
         public async ValueTask<BetResponse> Bet(BetRequest betRequest)
         {
+            ValidateToken(betRequest.Token);
+
             var bet = _mapper.Map<Bet>(betRequest);
             bet.BetDate = DateTime.UtcNow;
             var curRound = await _repository.GetRoundWithSessionAsync(bet.GameRoundId);
             ValidateBet(betRequest, curRound);
             
             bet.GameRound = curRound;
+            bet.Token = betRequest.Token;
+
             var saveTask = _repository.AddBetAsync(bet);
 
             //User id must be changed to real data
@@ -41,6 +43,14 @@ namespace CrashGameService.Service.Services
             // Save bet in db
             var response = new BetResponse { BetDate = bet.BetDate, GameRoundId = bet.GameRoundId, BetId = bet.Id };
             return response;
+        }
+
+        private bool ValidateToken(string? token)
+        {
+            if (string.IsNullOrEmpty(token))
+                throw new ApiException(403, "UnAuthorized");
+
+            return true;
         }
 
         private void ValidateBet(BetRequest bet, GameRound round)
@@ -56,9 +66,6 @@ namespace CrashGameService.Service.Services
 
             if (bet.Value <= 0)
                 throw new ApiException(400, "Invalid bet value");
-
-            if (bet.Multiplier > round.Multiplier)
-                throw new ApiException(400, "Invalid bet multiplier");
         }
 
         public async ValueTask<CashOutResponse> CashOut(CashOutRequest cashOutRequest)

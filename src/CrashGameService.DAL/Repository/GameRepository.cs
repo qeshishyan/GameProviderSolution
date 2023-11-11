@@ -13,10 +13,11 @@ namespace CrashGameService.DAL.Repository
             _dbContext = dbContext;
         }
 
-        public async Task AddSessionAsync(GameSession gameSession)
+        public async Task<int> AddSessionAsync(GameSession gameSession)
         {
             await _dbContext.GameSessions.AddAsync(gameSession);
             await _dbContext.SaveChangesAsync();
+            return gameSession.Id;
         }
 
         public async Task<GameRound> GetRoundWithSessionAsync(int roundId)
@@ -78,6 +79,51 @@ namespace CrashGameService.DAL.Repository
         {
             _dbContext.Update<GameSession>(session);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<List<double>> GetLastMultipliersAsync(int count, int sessionId)
+        {
+            try
+            {
+                var result = await _dbContext.GameRounds
+                    .Where(x=> x.GameSessionId == sessionId)
+                    .OrderByDescending(x => x.Id)
+                    .Take(count)
+                    .Select(x => x.Multiplier)
+                    .ToListAsync();
+
+                return result;
+                    
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<Bet>> GetLastBetsAsync(int count, int sessionId, int maxCount)
+        {
+            try
+            {
+                if (count > maxCount)
+                    count = maxCount;
+
+                var result = await _dbContext.Bets
+                    .Include(x=> x.GameRound)
+                    .Where(x => x.GameRound.GameSessionId == sessionId)
+                    .OrderByDescending(x => x.Id)
+                    .Take(count)
+                    .ToListAsync();
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }

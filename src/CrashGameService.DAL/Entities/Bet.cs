@@ -10,6 +10,5 @@
         public double Multiplier { get; set; }
         public string? Token { get; set; }
         public  GameRound GameRound { get; set; } 
-
     }
 }

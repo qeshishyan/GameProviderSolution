@@ -1,6 +1,7 @@
 ﻿using CrashGameService.DAL.IRepository;
 using CrashGameService.Repository.Entities;
 using CrashGameService.Service.HttpClients;
+using CrashGameService.Service.Models;
 using Shared.Exceptions;
 
 namespace CrashGameService.Service.Services
@@ -26,7 +27,7 @@ namespace CrashGameService.Service.Services
             _hubService = hubService;
         }
 
-        public async ValueTask StartGame()
+        public async ValueTask<GameSessionResponse> StartGame()
         {
             if (_currentGameSession.Started)
                 throw new ApiException(400, "Game already started");
@@ -34,9 +35,13 @@ namespace CrashGameService.Service.Services
             _currentGameSession.Started = true;
             _currentGameSession.StartedDate = DateTime.UtcNow;
 
-            await _repository.AddSessionAsync(_currentGameSession);
+            int id = await _repository.AddSessionAsync(_currentGameSession);
 
             await StartBettingTime();
+            return new GameSessionResponse
+            {
+                SessionId = id
+            };
         }
 
 
@@ -133,6 +138,33 @@ namespace CrashGameService.Service.Services
 
             await Task.WhenAll(saveTask, offTask.AsTask());
             await StartRound();
+        }
+
+        public async ValueTask<MultiplierListResponse> GetLastMultipliers(int count, int sessionId)
+        {
+            var result = await _repository.GetLastMultipliersAsync(count, sessionId);
+            return new MultiplierListResponse
+            {
+                Multipliers = result,
+                SessionId = sessionId
+            };
+        }
+
+        public async ValueTask<BetListResponse> GetLastBets(int count, int sessionId)
+        {
+            var result = await _repository.GetLastBetsAsync(count, sessionId, 50);
+            List<UserBetResponse> list = result.Select(x => new UserBetResponse
+            {
+                UserName = "User_" + new Random().Next(1, 99).ToString(),
+                BetValue = x.Value
+
+            }).ToList();
+
+            return new BetListResponse
+            {
+                Bets = list,
+                SessionId = sessionId
+            };
         }
     }
 }

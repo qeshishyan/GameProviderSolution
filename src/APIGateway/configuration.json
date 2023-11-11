@@ -64,6 +64,32 @@
           "Port": 7021
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/getLastMultipliers",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/getLastMultipliers",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/game/getLastBets",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/game/getLastBets",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "crash-game-service",
+          //"Host": "localhost",
+          "Port": 7021
+        }
+      ]
     }
   ]
 }

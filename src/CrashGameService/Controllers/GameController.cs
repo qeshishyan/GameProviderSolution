@@ -21,6 +21,7 @@ namespace CrashGameService.Controllers
         [HttpPost("bet")]
         public async ValueTask<IActionResult> Bet(BetRequest request)
         {
+            //Get user token from Header token 
             return Ok(await _betService.Bet(request));
         }
 
@@ -33,8 +34,22 @@ namespace CrashGameService.Controllers
         [HttpGet("start")]
         public async ValueTask<IActionResult> StartGame()
         {
-            await _gameService.StartGame();
-            return Ok(new { Message = "Game started" });
+            var respone = await _gameService.StartGame();
+            return Ok(respone);
+        }
+
+        [HttpPost("getLastMultipliers")]
+        public async ValueTask<IActionResult> GetLastMultipliers(GetLastMultiplierRequest request)
+        {
+            var response = await _gameService.GetLastMultipliers(request.SessionId, request.SessionId);
+            return Ok(response);
+        }
+
+        [HttpPost("getLastBets")]
+        public async ValueTask<IActionResult> GetLastBets(GetLastBetsRequest request)
+        {
+            var response = await _gameService.GetLastBets(request.SessionId, request.SessionId);
+            return Ok(response);
         }
     }
 }
