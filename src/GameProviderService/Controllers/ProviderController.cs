@@ -26,4 +26,11 @@ public class ProviderController : ControllerBase
         LaunchResponse result = await _providerService.LaunchGame(request);
         return Ok(result);
     }
+
+    [HttpPost("getUserSession")]
+    public async Task<IActionResult> GetUserSession(string token)
+    {
+        GetSessionResponse result = await _providerService.GetSessionInfo(token);
+        return Ok(result);
+    }
 }

@@ -3,5 +3,5 @@
     public class LaunchResponse
     {
         public string? Token { get; set; }
-    }
+    } 
 }

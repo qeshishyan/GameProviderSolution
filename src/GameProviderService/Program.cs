@@ -10,7 +10,7 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Add services to the container.
-builder.Services.AddClients(builder.Configuration);
+builder.Services.AddClients();
 builder.Services.AddServices();
 builder.Services.AddRepositories(builder.Configuration);
 builder.Services.AddControllers();

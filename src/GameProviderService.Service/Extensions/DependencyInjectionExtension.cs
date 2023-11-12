@@ -9,6 +9,7 @@ namespace GameProviderService.Service.Extensions
         {
             services.AddScoped<IProviderService, ProviderService>();
             services.AddSingleton<IJwtService, JwtService>();
+            services.AddSingleton<ISignatureService, SignatureService>();
         }
     }
 }

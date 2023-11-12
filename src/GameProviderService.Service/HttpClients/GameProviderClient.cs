@@ -1,29 +1,40 @@
-﻿using Newtonsoft.Json;
+﻿using GameProviderService.Service.DTO;
+using GameProviderService.Service.Services;
+using Newtonsoft.Json;
 
 namespace GameProviderService.Service.HttpClients
 {
     public class GameProviderClient : IGameProviderClient
     {
         private readonly HttpClient _httpClient;
-        public GameProviderClient(HttpClient httpClient)
+        private readonly ISignatureService _signature;
+        public GameProviderClient(HttpClient httpClient, ISignatureService signature)
         {
             _httpClient = httpClient;
+            _signature = signature;
         }
 
-        public async ValueTask<(double FirstOdd, double SecondOdd, double ThirdOdd)> GetOddsAsync()
+        public async ValueTask<SessionInfoResponseDTO?> GetSession(string token, string merchantId, string url)
         {
-            var response = await _httpClient.GetAsync("/getOdds");
+            try
+            {
+                _httpClient.BaseAddress = new Uri(url);
+                var jsonRequest = JsonConvert.SerializeObject(new SessionInfoRequestDTO
+                {
+                    Sign = _signature.GenerateSign(new Dictionary<string, string> { { "Token", token } }, merchantId),
+                    Token = token
+                });
+                var httpContent = new StringContent(jsonRequest);
+                var response = await _httpClient.PostAsync("/getSession", httpContent);
 
-            if (response.IsSuccessStatusCode)
-            {
                 var json = await response.Content.ReadAsStringAsync();
-                var odds = JsonConvert.DeserializeObject<dynamic>(json);
-                return ((double)odds.first_odd, (double)odds.second_odd, (double)odds.third_odd);
+                return JsonConvert.DeserializeObject<SessionInfoResponseDTO>(json);
             }
-            else
+            catch (Exception)
             {
-                throw new Exception($"Failed to get odds: {response.StatusCode}");
+                throw;
             }
+            
         }
     }
 }
