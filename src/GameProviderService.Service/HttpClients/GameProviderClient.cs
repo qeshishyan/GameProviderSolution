@@ -19,13 +19,8 @@ namespace GameProviderService.Service.HttpClients
             try
             {
                 _httpClient.BaseAddress = new Uri(url);
-                var jsonRequest = JsonConvert.SerializeObject(new SessionInfoRequestDTO
-                {
-                    Sign = _signature.GenerateSign(new Dictionary<string, string> { { "Token", token } }, merchantId),
-                    Token = token
-                });
-                var httpContent = new StringContent(jsonRequest);
-                var response = await _httpClient.PostAsync("/getSession", httpContent);
+                string sing = _signature.GenerateSign(new Dictionary<string, string> { { "Token", token } }, merchantId);
+                var response = await _httpClient.GetAsync($"/session?token={token}&sign={sing}");
 
                 var json = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<SessionInfoResponseDTO>(json);
@@ -34,7 +29,6 @@ namespace GameProviderService.Service.HttpClients
             {
                 throw;
             }
-            
         }
     }
 }
