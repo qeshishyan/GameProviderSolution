@@ -90,6 +90,19 @@
           "Port": 7021
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/gameProvider/launch",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/gameProvider/launch",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "provider-service",
+          //"Host": "localhost",
+          "Port": 7189
+        }
+      ]
     }
   ]
 }

@@ -1,3 +1,5 @@
+using GameProviderService.Service;
+using GameProviderService.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameProviderService.Controllers;
@@ -6,17 +8,22 @@ namespace GameProviderService.Controllers;
 [Route("api/[controller]")]
 public class ProviderController : ControllerBase
 {
-    [HttpGet(Name = "games")]
+    private readonly IProviderService _providerService;
+    public ProviderController(IProviderService providerService)
+    {
+        _providerService = providerService;
+    }
+    [HttpGet("games")]
     public async Task<IActionResult> GetGames()
     {
         await Task.CompletedTask;
         return Ok();
     }
 
-    [HttpGet(Name = "launch")]
-    public async Task<IActionResult> LaunchGame()
+    [HttpPost("launch")]
+    public async Task<IActionResult> LaunchGame(LaunchRequest request)
     {
-        await Task.CompletedTask;
-        return Ok();
+        LaunchResponse result = await _providerService.LaunchGame(request);
+        return Ok(result);
     }
 }

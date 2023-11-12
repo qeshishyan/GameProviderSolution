@@ -1,3 +1,5 @@
+using GameProviderService.DAL.Extensions;
+using GameProviderService.Service.Extensions;
 using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,14 +10,24 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 
 // Add services to the container.
-
+builder.Services.AddClients(builder.Configuration);
+builder.Services.AddServices();
+builder.Services.AddRepositories(builder.Configuration);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
-
+#if DEBUG
+#else
+using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<CrashDbContext>();
+    context.Database.Migrate();
+}
+#endif
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -28,6 +28,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrashGameLogic.Phyton", "Cr
 		src\CrashGameLogic.Phyton\Dockerfile = src\CrashGameLogic.Phyton\Dockerfile
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameProviderService.Service", "src\GameProviderService.Service\GameProviderService.Service.csproj", "{C97B29AE-DD05-4C26-9635-43890ACEE5A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameProviderService.DAL", "src\GameProviderService.DAL\GameProviderService.DAL.csproj", "{A793D7A3-1E33-4309-AC24-A486AF2ED57F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +66,14 @@ Global
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C97B29AE-DD05-4C26-9635-43890ACEE5A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C97B29AE-DD05-4C26-9635-43890ACEE5A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C97B29AE-DD05-4C26-9635-43890ACEE5A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C97B29AE-DD05-4C26-9635-43890ACEE5A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A793D7A3-1E33-4309-AC24-A486AF2ED57F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A793D7A3-1E33-4309-AC24-A486AF2ED57F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A793D7A3-1E33-4309-AC24-A486AF2ED57F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A793D7A3-1E33-4309-AC24-A486AF2ED57F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +87,8 @@ Global
 		{5D63750F-2AE4-4A7A-A211-509A2F445B4C} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{ECF4CAE1-7F2D-44B2-B45A-D10C8ED015EC} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 		{50BA453C-6C64-4095-BBB4-912C049B6762} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
+		{C97B29AE-DD05-4C26-9635-43890ACEE5A0} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
+		{A793D7A3-1E33-4309-AC24-A486AF2ED57F} = {E609EA42-BC12-43E5-8E70-9133BEB301F4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8873AB48-1999-449A-AEDA-DFBF1A000A06}

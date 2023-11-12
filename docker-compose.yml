@@ -41,6 +41,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  game-provider-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: GameProvider
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 554466
+    ports:
+      - "6433:6433"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
   provider-service:
     image: provider-service
     build:
